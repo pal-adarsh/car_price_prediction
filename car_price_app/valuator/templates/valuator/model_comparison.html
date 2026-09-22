@@ -1,0 +1,121 @@
+{% extends 'valuator/base.html' %}
+
+{% block title %}5-Model Regression Benchmark | Model Comparison{% endblock %}
+
+{% block content %}
+<div style="max-width: 1000px; margin: 0 auto;">
+    
+    <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-label" style="color: var(--accent-brass);">EXPERIMENTAL BENCHMARK</span>
+        <h1 style="font-size: 2.2rem; margin-top: 0.3rem; margin-bottom: 0.5rem;">5-Model Regression Comparison</h1>
+        <p style="color: var(--ink-soft); font-size: 0.9rem;">
+            Comparative analysis of five regression architectures trained on 15,242 cleaned records from Cardekho dataset.
+        </p>
+    </div>
+
+    <!-- Table -->
+    <div class="form-section" style="padding: 0; overflow: hidden; margin-bottom: 2.5rem;">
+        <div style="padding: 1rem 1.5rem; border-bottom: 1px solid var(--line); background: #1F2126;">
+            <strong style="color: var(--paper); font-family: 'Fraunces', serif;">Performance Metrics (R², MAE, RMSE)</strong>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+            <thead>
+                <tr style="background-color: #17181C; border-bottom: 1px solid var(--line); color: var(--accent-chrome);" class="mono-tabular">
+                    <th style="padding: 0.75rem 1.5rem;">Model</th>
+                    <th style="padding: 0.75rem 1.5rem; text-align: right;">R² Score</th>
+                    <th style="padding: 0.75rem 1.5rem; text-align: right;">MAE (₹)</th>
+                    <th style="padding: 0.75rem 1.5rem; text-align: right;">RMSE (₹)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in models %}
+                <tr style="border-bottom: 1px solid rgba(244,243,240,0.06); {% if m.is_best %}background: rgba(184, 146, 74, 0.1); font-weight: 600;{% endif %}">
+                    <td style="padding: 1rem 1.5rem;">
+                        {% if m.is_best %}<span style="color: var(--accent-brass); margin-right: 0.5rem;">★</span>{% endif %}
+                        <strong>{{ m.name }}</strong>
+                    </td>
+                    <td style="padding: 1rem 1.5rem; text-align: right;" class="mono-tabular">
+                        <span style="{% if m.is_best %}color: var(--signal-value); font-weight: 700;{% elif m.r2_score < 0.5 %}color: #C55348;{% endif %}">
+                            {{ m.r2_score }}
+                        </span>
+                    </td>
+                    <td style="padding: 1rem 1.5rem; text-align: right;" class="mono-tabular">
+                        {{ m.formatted_mae }}
+                    </td>
+                    <td style="padding: 1rem 1.5rem; text-align: right; color: var(--accent-chrome);" class="mono-tabular">
+                        {{ m.formatted_rmse }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Chart.js R2 Bar Chart -->
+    <div class="form-section">
+        <h3 style="margin-top: 0; font-size: 1.2rem;">R² Score Bar Chart</h3>
+        <div style="height: 280px; position: relative; margin-top: 1rem;">
+            <canvas id="r2Chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Viva talking points -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+        <div class="form-section" style="margin-bottom: 0;">
+            <h4 style="color: var(--accent-brass); margin-top: 0;">AdaBoost Underperformance (R² = 0.4589)</h4>
+            <p style="font-size: 0.8rem; color: var(--paper); line-height: 1.6;">
+                AdaBoost's default loss sequentially inflates weights for high-error outliers. Because selling prices feature luxury supercars (up to ₹3.95 Cr) and mileage outliers (>3.8M km), boosting concentrates capacity on fitting extreme outliers rather than standard vehicles.
+            </p>
+        </div>
+
+        <div class="form-section" style="margin-bottom: 0;">
+            <h4 style="color: var(--accent-brass); margin-top: 0;">SVR Dual Standardization (R² = 0.6898)</h4>
+            <p style="font-size: 0.8rem; color: var(--paper); line-height: 1.6;">
+                SVR utilizes RBF distance metrics. Without scaling target vector <code>y</code>, kernel optimization destabilizes and yields negative R². Standardizing both X and y with inverse transformation achieves R² = 0.6898.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const ctx = document.getElementById('r2Chart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Linear Reg', 'Decision Tree', 'Random Forest', 'AdaBoost', 'SVR (Scaled)'],
+            datasets: [{
+                label: 'R² Score',
+                data: [0.6360, 0.8587, 0.8790, 0.4589, 0.6898],
+                backgroundColor: [
+                    '#9A9E9F',
+                    '#9A9E9F',
+                    '#B8924A',
+                    '#8C8F94',
+                    '#9A9E9F'
+                ],
+                borderRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    min: 0,
+                    max: 1.0,
+                    grid: { color: 'rgba(244, 243, 240, 0.08)' },
+                    ticks: { color: '#8C8F94' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#F4F3F0' }
+                }
+            },
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+</script>
+{% endblock %}

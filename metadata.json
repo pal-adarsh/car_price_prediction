@@ -1,0 +1,6 @@
+{
+  "name": "Used Car Price Prediction & Valuation Desk",
+  "description": "Dealership appraisal desk and ML regression benchmark suite for predicting used car resale valuations using Random Forest and comparative models.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

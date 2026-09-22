@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Used Car Valuation Desk{% endblock %} | BE Machine Learning Lab</title>
+    <!-- Google Fonts: Fraunces, IBM Plex Mono, Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'valuator/css/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header style="border-bottom: 1px solid var(--line); background-color: #17181C; padding: 1rem 0;">
+        <div style="max-w-7xl: 1200px; max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <a href="{% url 'valuator:home' %}" style="text-decoration: none;">
+                    <div style="font-family: 'Fraunces', Georgia, serif; font-size: 1.4rem; font-weight: 600; color: var(--paper);">
+                        Valuator
+                    </div>
+                </a>
+                <div style="font-size: 0.75rem; color: var(--ink-soft);">
+                    Automotive Appraisal Desk &amp; Regression Benchmark
+                </div>
+            </div>
+
+            <nav style="display: flex; gap: 1rem; align-items: center;">
+                <a href="{% url 'valuator:home' %}" style="color: var(--paper); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 0.4rem 0.8rem; border-radius: 4px; background: rgba(244,243,240,0.06);">
+                    Appraisal Desk
+                </a>
+                <a href="{% url 'valuator:model_comparison' %}" style="color: var(--ink-soft); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 0.4rem 0.8rem; border-radius: 4px;">
+                    Model Comparison
+                </a>
+                <a href="{% url 'valuator:insights' %}" style="color: var(--ink-soft); text-decoration: none; font-size: 0.85rem; font-weight: 500; padding: 0.4rem 0.8rem; border-radius: 4px;">
+                    Feature Insights
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Block -->
+    <main style="max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; min-height: 70vh;">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer with Academic Disclaimer -->
+    <footer style="border-top: 1px solid var(--line); background-color: #121316; padding: 2rem 0; margin-top: 4rem; font-size: 0.75rem; color: var(--ink-soft);">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="font-family: 'Fraunces', serif; color: var(--paper); font-weight: 600;">
+                    Used Car Valuation Desk
+                </div>
+                <div class="mono-tabular" style="color: var(--accent-chrome);">
+                    Random Forest R² 0.8790 &bull; MAE &plusmn;₹1,05,480 &bull; 15,242 Records
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(244,243,240,0.06); padding-top: 1rem; line-height: 1.5;">
+                <strong>Academic Project Disclaimer:</strong> This web application and machine learning model were built for academic research and evaluation in BE Machine Learning Lab. Valuations are statistical regression estimates derived from Cardekho marketplace records and do not constitute certified market quotes.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+{% extends 'valuator/base.html' %}
+
+{% block title %}Appraisal Form | Used Car Price Valuation{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    
+    <div style="margin-bottom: 2rem;">
+        <span class="eyebrow-label" style="color: var(--accent-brass);">SECTIONED APPRAISAL DESK</span>
+        <h1 style="font-size: 2.2rem; margin-top: 0.3rem; margin-bottom: 0.5rem;">Vehicle Valuation Appraisal</h1>
+        <p style="color: var(--ink-soft); font-size: 0.9rem;">
+            Provide vehicle identity, odometer history, and engine specifications to calculate a certified valuation powered by an optimized Random Forest Regressor (R² = 0.8790).
+        </p>
+    </div>
+
+    <form method="POST" action="{% url 'valuator:home' %}">
+        {% csrf_token %}
+
+        <!-- SECTION 1: Vehicle Identity -->
+        <div class="form-section">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span class="mono-tabular" style="font-size: 0.65rem; color: var(--accent-brass); text-transform: uppercase; font-weight: 700; letter-spacing: 0.15em;">SECTION I</span>
+                    <h3 style="margin: 0.2rem 0 0 0; font-size: 1.15rem;">Vehicle Identity</h3>
+                </div>
+                <span class="mono-tabular" style="font-size: 0.75rem; color: var(--ink-soft);">Brand &amp; Drivetrain</span>
+            </div>
+
+            <div class="spec-divider">
+                <div class="spec-divider-line">
+                    <div class="spec-divider-ticks left"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+                    <div class="spec-divider-ticks right"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem;">
+                <div>
+                    <label for="id_brand" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Brand / Make <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.brand }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">31 normalized classes from LabelEncoder</small>
+                </div>
+
+                <div>
+                    <label for="id_vehicle_age" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Vehicle Age (Years) <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.vehicle_age }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">Years elapsed since registration (0–29)</small>
+                </div>
+
+                <div>
+                    <label for="id_transmission_type" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Transmission <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.transmission_type }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">Manual or Automatic gearbox</small>
+                </div>
+
+                <div>
+                    <label for="id_fuel_type" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Fuel Type <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.fuel_type }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">Petrol, Diesel, CNG, LPG, Electric</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Usage & Condition -->
+        <div class="form-section">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span class="mono-tabular" style="font-size: 0.65rem; color: var(--accent-brass); text-transform: uppercase; font-weight: 700; letter-spacing: 0.15em;">SECTION II</span>
+                    <h3 style="margin: 0.2rem 0 0 0; font-size: 1.15rem;">Usage &amp; Condition</h3>
+                </div>
+                <span class="mono-tabular" style="font-size: 0.75rem; color: var(--ink-soft);">Odometer &amp; Channel</span>
+            </div>
+
+            <div class="spec-divider">
+                <div class="spec-divider-line">
+                    <div class="spec-divider-ticks left"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+                    <div class="spec-divider-ticks right"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+                <div>
+                    <label for="id_km_driven" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Kilometers Driven (km) <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.km_driven }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">Total distance run (100–3,800,000 km)</small>
+                </div>
+
+                <div>
+                    <label for="id_mileage" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Fuel Economy (km/l or km/kg) <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.mileage }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">ARAI certified mileage efficiency</small>
+                </div>
+
+                <div>
+                    <label for="id_seller_type" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Seller Type <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.seller_type }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">Individual, Dealer, Trustmark Dealer</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Engine Specification -->
+        <div class="form-section">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span class="mono-tabular" style="font-size: 0.65rem; color: var(--accent-brass); text-transform: uppercase; font-weight: 700; letter-spacing: 0.15em;">SECTION III</span>
+                    <h3 style="margin: 0.2rem 0 0 0; font-size: 1.15rem;">Engine Specification</h3>
+                </div>
+                <span class="mono-tabular" style="font-size: 0.75rem; color: var(--accent-brass); font-weight: 600;">max_power dominates (63.5%)</span>
+            </div>
+
+            <div class="spec-divider">
+                <div class="spec-divider-line">
+                    <div class="spec-divider-ticks left"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+                    <div class="spec-divider-ticks right"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem;">
+                <div>
+                    <label for="id_engine" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Engine Displacement (cc) <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.engine }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">Cylinder capacity (e.g. 1197 cc)</small>
+                </div>
+
+                <div>
+                    <label for="id_max_power" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Maximum Power (bhp) <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.max_power }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--accent-brass); margin-top: 0.3rem; font-weight: 600;">Horsepower (63.5% feature importance)</small>
+                </div>
+
+                <div>
+                    <label for="id_seats" style="display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 0.4rem; color: var(--paper);">
+                        Seating Capacity <span style="color: var(--accent-brass);">*</span>
+                    </label>
+                    {{ form.seats }}
+                    <small style="display: block; font-size: 0.7rem; color: var(--ink-soft); margin-top: 0.3rem;">Seats (2–9, zero-seat anomalies purged)</small>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 2rem;">
+            <div class="mono-tabular" style="font-size: 0.75rem; color: var(--ink-soft);">
+                Engine: Random Forest Regressor (n_estimators=100)
+            </div>
+            <button type="submit" class="btn-primary" id="btn-estimate">
+                Estimate price &rarr;
+            </button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

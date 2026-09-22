@@ -1,0 +1,121 @@
+/* Dealership Valuation Desk Design System */
+:root {
+  --charcoal:      #17181C;  /* primary background, deep automotive charcoal */
+  --paper:         #F4F3F0;  /* light surface / card background, warm white */
+  --paper-dim:     #E8E6E1;  /* subtle section divider background */
+  --signal-value:  #1E6E4F;  /* positive/valuation-confirmed accent — deep emerald */
+  --accent-chrome: #9A9E9F;  /* metallic steel-grey accent, chrome trim */
+  --accent-brass:  #B8924A;  /* muted brass/gold — used for price figures */
+  --ink-soft:      #8C8F94;  /* secondary/muted text on dark */
+  --slate-600:     #4B4E52;  /* secondary text on light */
+  --line:          rgba(244, 243, 240, 0.12); /* hairline dividers on dark */
+}
+
+body {
+  background-color: var(--charcoal);
+  color: var(--paper);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, .serif-heading {
+  font-family: 'Fraunces', Georgia, serif;
+  font-weight: 600;
+  color: var(--paper);
+}
+
+.mono-tabular {
+  font-family: 'IBM Plex Mono', monospace;
+  font-feature-settings: 'tnum' 1;
+}
+
+/* Spec Sheet Gauge Tick Divider Motif */
+.spec-divider {
+  width: 100%;
+  margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.spec-divider-line {
+  flex: 1;
+  height: 1px;
+  background-color: var(--line);
+  position: relative;
+}
+
+.spec-divider-ticks {
+  position: absolute;
+  top: -4px;
+  display: flex;
+  gap: 4px;
+}
+
+.spec-divider-ticks.left { left: 0; }
+.spec-divider-ticks.right { right: 0; }
+
+.tick-major { width: 1px; height: 9px; background: var(--accent-brass); }
+.tick-minor { width: 1px; height: 5px; background: var(--accent-chrome); }
+
+/* Price Hero */
+.price-hero {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--paper);
+  line-height: 1.1;
+}
+
+.eyebrow-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--signal-value);
+}
+
+/* Form Styling */
+.form-section {
+  background-color: #17181C;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-control {
+  width: 100%;
+  background-color: #1F2126;
+  border: 1px solid rgba(244, 243, 240, 0.16);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  color: var(--paper);
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent-brass);
+  box-shadow: 0 0 0 1px var(--accent-brass);
+}
+
+.btn-primary {
+  background-color: var(--accent-brass);
+  color: #17181C;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  padding: 0.8rem 1.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.btn-primary:hover {
+  background-color: #c9a155;
+}

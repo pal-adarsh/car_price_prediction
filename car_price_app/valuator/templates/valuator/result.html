@@ -1,0 +1,117 @@
+{% extends 'valuator/base.html' %}
+
+{% block title %}Valuation Certificate | {{ input_data.brand }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <span class="eyebrow-label">VALUATION CERTIFICATE</span>
+            <h1 style="font-size: 2.2rem; margin: 0.2rem 0;">{{ input_data.brand }} Valuation Sheet</h1>
+        </div>
+        <div>
+            <a href="{% url 'valuator:home' %}" style="color: var(--paper); text-decoration: none; font-size: 0.85rem; padding: 0.5rem 1rem; border: 1px solid var(--line); border-radius: 4px; background: #1F2126;">
+                &larr; New Appraisal
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Valuation Display -->
+    <div style="background: linear-gradient(180deg, #1F2126 0%, #17181C 100%); border: 1px solid rgba(184, 146, 74, 0.4); border-radius: 6px; padding: 2.5rem; margin-bottom: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); position: relative;">
+        <div class="eyebrow-label">ESTIMATED VALUE</div>
+        
+        <div style="display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; margin: 0.5rem 0;">
+            <div class="price-hero mono-tabular">
+                {{ formatted_price }}
+            </div>
+            <div class="mono-tabular" style="color: var(--accent-brass); font-size: 1.2rem; font-weight: 600;">
+                ({{ price_words }})
+            </div>
+        </div>
+
+        <p style="color: var(--paper); font-size: 0.95rem; margin-top: 0.75rem; max-width: 650px;">
+            Typical estimate is within <strong class="mono-tabular">₹{{ mae|floatformat:0 }}</strong> of the actual price (Random Forest Mean Absolute Error: ±{{ formatted_mae }}).
+        </p>
+
+        <div class="spec-divider" style="margin: 2rem 0;">
+            <div class="spec-divider-line">
+                <div class="spec-divider-ticks left"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+                <div class="spec-divider-ticks right"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+            </div>
+        </div>
+
+        <!-- Confidence Bounds -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="background: #17181C; border: 1px solid var(--line); border-radius: 4px; padding: 1rem;">
+                <span class="mono-tabular" style="font-size: 0.65rem; color: var(--ink-soft); text-transform: uppercase; display: block;">Conservative (-1 MAE)</span>
+                <span class="mono-tabular" style="font-size: 1.1rem; font-weight: 600; color: var(--accent-chrome);">{{ low_estimate }}</span>
+            </div>
+            <div style="background: rgba(184, 146, 74, 0.1); border: 1px solid var(--accent-brass); border-radius: 4px; padding: 1rem;">
+                <span class="mono-tabular" style="font-size: 0.65rem; color: var(--accent-brass); text-transform: uppercase; font-weight: 700; display: block;">Expected Value (Median)</span>
+                <span class="mono-tabular" style="font-size: 1.1rem; font-weight: 700; color: var(--paper);">{{ formatted_price }}</span>
+            </div>
+            <div style="background: #17181C; border: 1px solid var(--line); border-radius: 4px; padding: 1rem;">
+                <span class="mono-tabular" style="font-size: 0.65rem; color: var(--ink-soft); text-transform: uppercase; display: block;">Optimistic (+1 MAE)</span>
+                <span class="mono-tabular" style="font-size: 1.1rem; font-weight: 600; color: var(--accent-chrome);">{{ high_estimate }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input Recap Table -->
+    <div class="form-section">
+        <h3 style="margin-top: 0; font-size: 1.2rem;">Input Vehicle Specifications</h3>
+        
+        <div class="spec-divider" style="margin: 1rem 0;">
+            <div class="spec-divider-line">
+                <div class="spec-divider-ticks left"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+                <div class="spec-divider-ticks right"><span class="tick-major"></span><span class="tick-minor"></span><span class="tick-major"></span></div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; font-size: 0.85rem;">
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Brand:</span>
+                <strong style="color: var(--paper);">{{ input_data.brand }}</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Vehicle Age:</span>
+                <strong class="mono-tabular" style="color: var(--paper);">{{ input_data.vehicle_age }} Years</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Odometer:</span>
+                <strong class="mono-tabular" style="color: var(--paper);">{{ input_data.km_driven }} km</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Transmission:</span>
+                <strong style="color: var(--paper);">{{ input_data.transmission_type }}</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Fuel:</span>
+                <strong style="color: var(--paper);">{{ input_data.fuel_type }}</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Seller Channel:</span>
+                <strong style="color: var(--paper);">{{ input_data.seller_type }}</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Engine:</span>
+                <strong class="mono-tabular" style="color: var(--paper);">{{ input_data.engine }} cc</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Max Power:</span>
+                <strong class="mono-tabular" style="color: var(--accent-brass);">{{ input_data.max_power }} bhp</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Fuel Economy:</span>
+                <strong class="mono-tabular" style="color: var(--paper);">{{ input_data.mileage }} km/l</strong>
+            </div>
+            <div style="border-bottom: 1px solid var(--line); padding: 0.5rem 0; display: flex; justify-content: space-between;">
+                <span style="color: var(--ink-soft);">Seats:</span>
+                <strong class="mono-tabular" style="color: var(--paper);">{{ input_data.seats }}</strong>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
